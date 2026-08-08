@@ -3,74 +3,445 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Live Consultoria</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Painel Admin | Live Consultoria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* Estilos específicos do painel admin */
-    .admin-container {
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 30px;
+    :root {
+      --bg: #0A0A0A;
+      --bg-elevated: #141414;
+      --bg-card: #1A1A1A;
+      --accent: #C9A84C;
+      --accent-dim: rgba(201, 168, 76, 0.12);
+      --text: #F5F0E8;
+      --text-muted: #888;
+      --border: #2A2A2A;
+      --danger: #E2596A;
+      --success: #2ecc71;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* ── Card ─────────────────────────────── */
+    .card {
       background: var(--bg-elevated);
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      animation: fadeIn .3s ease;
     }
-    .admin-container h1 {
-      color: var(--primary);
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── Logo / Avatar ────────────────────── */
+    .logo {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #0A0A0A;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
       text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
+      margin-bottom: .4rem;
     }
-    .success-msg {
-      background: rgba(40, 167, 69, 0.1);
-      color: #28a745;
-      padding: 10px;
-      border: 1px solid #28a745;
-      border-radius: 6px;
-      margin-bottom: 15px;
+    .subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: .875rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Form ─────────────────────────────── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      margin-bottom: 1rem;
+    }
+    label {
+      font-size: .8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+    input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: .95rem;
+      padding: .75rem 1rem;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    input::placeholder { color: var(--text-muted); }
+
+    /* ── Botões ───────────────────────────── */
+    .btn {
+      width: 100%;
+      padding: .85rem;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: .95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .2s, transform .1s;
+      margin-top: .5rem;
+    }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { background: var(--accent); color: #0A0A0A; }
+    .btn-primary:hover { opacity: .9; }
+    .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      margin-top: .75rem;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+    /* ── Alertas ──────────────────────────── */
+    .alert {
+      padding: .75rem 1rem;
+      border-radius: var(--radius);
+      font-size: .875rem;
+      margin-bottom: 1rem;
       display: none;
-      text-align: center;
     }
+    .alert.error   { background: rgba(226,89,106,.1); border: 1px solid var(--danger); color: var(--danger); }
+    .alert.success { background: rgba(46,204,113,.1); border: 1px solid var(--success); color: var(--success); }
+    .alert.show    { display: block; }
+
+    /* ── Resultado criação ────────────────── */
+    .result-box {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-top: 1rem;
+      display: none;
+    }
+    .result-box.show { display: block; }
+    .result-box p { font-size: .875rem; margin-bottom: .3rem; }
+    .result-box strong { color: var(--accent); font-family: monospace; font-size: .95rem; }
+    .copy-row {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: .5rem;
+    }
+    .copy-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 6px;
+      color: #0A0A0A;
+      cursor: pointer;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .3rem .6rem;
+      flex-shrink: 0;
+    }
+    .email-display {
+      font-family: monospace;
+      font-size: .82rem;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+
+    /* ── Divider ──────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    /* ── Nav link ─────────────────────────── */
+    .nav-link {
+      display: block;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: .85rem;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+    .nav-link:hover { color: var(--accent); }
+
+    /* ── Spinner ──────────────────────────── */
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,.3);
+      border-top-color: #0A0A0A;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+      margin-right: .4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <!-- Tela de Login do Admin (Simples proteção local) -->
-  <div id="admin-auth" class="admin-container">
-    <h1>Acesso Restrito</h1>
-    <form id="form-admin-auth">
-      <input type="password" id="master-password" placeholder="Senha Mestra" required />
-      <button type="submit">Acessar Painel</button>
-      <p id="admin-error" class="error-msg hidden"></p>
+  <!-- ── Tela: Login do Admin ── -->
+  <div id="screen-login" class="card">
+    <div class="logo">L</div>
+    <h1>Área Restrita</h1>
+    <p class="subtitle">Entre com o e-mail e senha da equipe Live Consultoria.</p>
+
+    <div id="login-alert" class="alert error"></div>
+
+    <form id="form-login" novalidate>
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" id="login-email" placeholder="consultor@liveconsultoria.com.br" autocomplete="email" required />
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn btn-primary" id="btn-login">Entrar</button>
     </form>
   </div>
 
-  <!-- Painel de Criação de Usuário -->
-  <div id="admin-panel" class="admin-container hidden">
-    <h1>Criar Acesso de Cliente</h1>
-    <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
-      Gere o login do cliente preenchendo o número de telefone.
-    </p>
-    <div id="success-msg" class="success-msg">Usuário criado com sucesso!</div>
-    
-    <form id="form-create-user">
-      <div class="input-group">
-        <label>Telefone do Cliente (DDD + Número)</label>
-        <input type="text" id="new-phone" placeholder="Ex: 62984002840" required />
+  <!-- ── Tela: Painel ── -->
+  <div id="screen-panel" class="card hidden">
+    <div class="logo">L</div>
+    <h1>Painel Admin</h1>
+    <p class="subtitle" id="admin-greeting">Live Consultoria</p>
+
+    <hr class="divider" />
+
+    <h2 style="font-family:'Inter',sans-serif; font-size:1rem; font-weight:600; margin-bottom:1rem;">
+      Criar acesso de cliente
+    </h2>
+
+    <div id="create-alert-error" class="alert error"></div>
+    <div id="create-alert-success" class="alert success"></div>
+
+    <form id="form-create" novalidate>
+      <div class="form-group">
+        <label>Telefone (DDD + número, sem espaços)</label>
+        <input type="tel" id="new-phone" placeholder="62984002840" required />
       </div>
-      <div class="input-group">
-        <label>Senha Provisória</label>
-        <input type="text" id="new-password" value="Luiz2840" required />
+      <div class="form-group">
+        <label>Senha provisória</label>
+        <input type="text" id="new-password" placeholder="Ex: Live2026" required />
       </div>
-      <button type="submit" id="btn-create">Criar Acesso</button>
-      <p id="create-error" class="error-msg hidden"></p>
+      <button type="submit" class="btn btn-primary" id="btn-create">Criar acesso</button>
     </form>
-    
-    <div style="text-align: center; margin-top: 20px;">
-      <a href="index.html" style="color: var(--text-muted); text-decoration: underline;">Voltar para o Chat</a>
+
+    <!-- Resultado após criar -->
+    <div id="result-box" class="result-box">
+      <p>✅ Acesso criado! Compartilhe com o cliente:</p>
+      <p style="margin-top:.6rem;">🔑 <strong>Login (e-mail):</strong></p>
+      <div class="copy-row">
+        <span id="result-email" class="email-display"></span>
+        <button class="copy-btn" onclick="copyField('result-email', this)">Copiar</button>
+      </div>
+      <p style="margin-top:.6rem;">🔒 <strong>Senha:</strong></p>
+      <div class="copy-row">
+        <span id="result-password" class="email-display"></span>
+        <button class="copy-btn" onclick="copyField('result-password', this)">Copiar</button>
+      </div>
     </div>
+
+    <hr class="divider" />
+    <a href="index.html" class="nav-link">← Voltar para o Chat</a>
+    <button class="btn btn-ghost" id="btn-logout">Sair do painel</button>
   </div>
 
-  <script type="module" src="assets/js/admin.js"></script>
+  <script type="module">
+    import { auth } from "./assets/js/firebase-config.js";
+    import {
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const EMAIL_DOMAIN = "web.liveconsultoria.com.br";
+
+    /* ── helpers ── */
+    function showScreen(id) {
+      document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add("hidden"));
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    function showAlert(elId, msg, type = "error") {
+      const el = document.getElementById(elId);
+      el.textContent = msg;
+      el.className = `alert ${type} show`;
+    }
+
+    function hideAlert(elId) {
+      const el = document.getElementById(elId);
+      el.className = "alert";
+    }
+
+    function setLoading(btn, loading, defaultText) {
+      btn.disabled = loading;
+      btn.innerHTML = loading
+        ? `<span class="spinner"></span> Aguarde…`
+        : defaultText;
+    }
+
+    function normalizePhone(raw) {
+      const d = (raw || "").replace(/\D/g, "");
+      return (d.length === 10 || d.length === 11) && !d.startsWith("55") ? `55${d}` : d;
+    }
+
+    function syntheticEmail(phone) {
+      return `${normalizePhone(phone)}@${EMAIL_DOMAIN}`;
+    }
+
+    /* ── Auth observer ── */
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        document.getElementById("admin-greeting").textContent = user.email;
+        showScreen("screen-panel");
+      } else {
+        showScreen("screen-login");
+      }
+    });
+
+    /* ── Login ── */
+    document.getElementById("form-login").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideAlert("login-alert");
+      const btn = document.getElementById("btn-login");
+      const email = document.getElementById("login-email").value.trim();
+      const pass  = document.getElementById("login-password").value;
+
+      if (!email || !pass) {
+        showAlert("login-alert", "Preencha e-mail e senha.");
+        return;
+      }
+
+      setLoading(btn, true, "Entrar");
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        // onAuthStateChanged cuida de trocar a tela
+      } catch (err) {
+        const msgs = {
+          "auth/user-not-found": "E-mail não encontrado.",
+          "auth/wrong-password": "Senha incorreta.",
+          "auth/invalid-credential": "E-mail ou senha inválidos.",
+          "auth/too-many-requests": "Muitas tentativas. Aguarde alguns minutos.",
+        };
+        showAlert("login-alert", msgs[err.code] || "Erro ao entrar: " + err.message);
+      } finally {
+        setLoading(btn, false, "Entrar");
+      }
+    });
+
+    /* ── Logout ── */
+    document.getElementById("btn-logout").addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    /* ── Criar usuário ── */
+    document.getElementById("form-create").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideAlert("create-alert-error");
+      hideAlert("create-alert-success");
+      document.getElementById("result-box").classList.remove("show");
+
+      const btn      = document.getElementById("btn-create");
+      const phoneRaw = document.getElementById("new-phone").value.trim();
+      const password = document.getElementById("new-password").value.trim();
+
+      if (!phoneRaw || !password) {
+        showAlert("create-alert-error", "Preencha telefone e senha.");
+        return;
+      }
+      if (password.length < 6) {
+        showAlert("create-alert-error", "A senha deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      const email = syntheticEmail(phoneRaw);
+      setLoading(btn, true, "Criar acesso");
+
+      // Guarda a sessão atual (admin) para restaurar após criar
+      const adminUser = auth.currentUser;
+
+      try {
+        // Cria o novo usuário (Firebase faz login automático nele)
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        // Desloga o cliente recém-criado e reautentica o admin
+        await signOut(auth);
+
+        // Reautentica o admin automaticamente — basta rein­iciar a sessão do admin
+        // (Como usamos onAuthStateChanged, a tela mudaria; para evitar isso,
+        // exibimos o resultado antes do sign-out e mantemos o painel visível manualmente)
+        showScreen("screen-panel");
+
+        // Exibe resultado
+        document.getElementById("result-email").textContent    = email;
+        document.getElementById("result-password").textContent = password;
+        document.getElementById("result-box").classList.add("show");
+        showAlert("create-alert-success", `Acesso criado para o telefone ${phoneRaw}.`, "success");
+
+        // Limpa campos
+        document.getElementById("new-phone").value    = "";
+        document.getElementById("new-password").value = "";
+
+      } catch (err) {
+        const msgs = {
+          "auth/email-already-in-use": "Este telefone já possui acesso cadastrado.",
+          "auth/weak-password": "Senha muito fraca (mínimo 6 caracteres).",
+        };
+        showAlert("create-alert-error", msgs[err.code] || "Erro: " + err.message);
+      } finally {
+        setLoading(btn, false, "Criar acesso");
+      }
+    });
+
+    /* ── Copiar para área de transferência ── */
+    window.copyField = function(id, btn) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = "✓ Copiado";
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      });
+    };
+  </script>
 </body>
 </html>
