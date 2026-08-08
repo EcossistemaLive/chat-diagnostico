@@ -19,32 +19,103 @@ let currentState = 0;
 const diagnosticData = {};
 
 const questions = [
-  { id: 'empresa_nome', text: 'Olá! Sou o Julio, seu consultor digital. Para começarmos nosso diagnóstico M.A.P.C.A, qual é o nome da sua empresa?' },
-  { id: 'empresa_cnpj', text: 'Excelente. Poderia me informar o CNPJ?' },
-  { id: 'empresa_endereco', text: 'E qual é o endereço completo (com cidade e estado)?' },
-  { id: 'representante_nome', text: 'Quem é o representante legal da empresa?' },
-  { id: 'representante_cpf', text: 'Poderia me informar o CPF desse representante?' },
-  { id: 'consultor_nome', text: 'Quem é o consultor da Live Consultoria responsável por este atendimento?' },
-  { id: 'consultor_email', text: 'Qual é o e-mail desse consultor?' },
-  { id: 'estrategia_proposito', text: 'Certo, vamos à Estratégia. A empresa possui um propósito e uma visão claros? Sabem onde querem chegar?' },
-  { id: 'estrategia_gargalos', text: 'Quais você considera os principais gargalos na Estratégia hoje?' },
-  { id: 'estrategia_nota', text: 'De 1 a 5, que nota você daria para o Posicionamento Estratégico atual?', type: 'quick-reply', options: ['1', '2', '3', '4', '5'] },
-  { id: 'gov_socios', text: 'Sobre Governança: Quantos são os sócios da empresa?' },
-  { id: 'gov_reunioes', text: 'Vocês fazem reuniões periódicas de resultados?', type: 'quick-reply', options: ['Sim, estruturadas', 'Às vezes / Informais', 'Não fazemos'] },
-  { id: 'gov_conhecimento', text: 'Os sócios possuem conhecimento técnico para exercer suas funções atuais? Há um mecanismo claro de tomada de decisão conjunta?' },
-  { id: 'financeiro_controles', text: 'Passando para Finanças: Como são os controles financeiros (ex: fluxo de caixa, DRE)?' },
-  { id: 'financeiro_gargalos', text: 'Quais os principais gargalos no Financeiro (ex: endividamento, margens)?' },
-  { id: 'financeiro_nota', text: 'De 1 a 5, como você avalia a Gestão Financeira?', type: 'quick-reply', options: ['1', '2', '3', '4', '5'] },
-  { id: 'processos_ferramentas', text: 'Sobre Operações: Quais ERPs e Ferramentas são utilizadas no dia a dia?' },
-  { id: 'processos_gargalos', text: 'E quais os principais gargalos nos Processos (ex: muito trabalho manual)?' },
-  { id: 'processos_nota', text: 'De 1 a 5, qual a sua nota para os Processos e Automação?', type: 'quick-reply', options: ['1', '2', '3', '4', '5'] },
-  { id: 'pessoas_clima', text: 'Em Pessoas e Liderança: Como é o clima organizacional e a estrutura de liderança?' },
-  { id: 'pessoas_gargalos', text: 'Quais os maiores gargalos aqui (ex: turnover, falta de treinamento)?' },
-  { id: 'pessoas_nota', text: 'De 1 a 5, como avalia a área de Pessoas?', type: 'quick-reply', options: ['1', '2', '3', '4', '5'] },
-  { id: 'marketing_panorama', text: 'Marketing & Estoque: Como está a identidade da marca e a aquisição de clientes?' },
-  { id: 'estoque_panorama', text: 'E sobre Compras/Estoque: Como estão as políticas, perdas e giro?' },
-  { id: 'marketing_estoque_nota', text: 'De 1 a 5, qual a nota geral para Marketing e Operação de Produtos?', type: 'quick-reply', options: ['1', '2', '3', '4', '5'] },
-  { id: 'diagnostico_geral', text: 'Para encerrar, deixe aqui algumas observações finais ou o contexto geral da empresa.' }
+  { id: 'empresa_nome', text: [
+    'Olá! 👋 Sou o Julio, seu consultor digital da Live Consultoria.', 
+    'Estou aqui para realizar o nosso diagnóstico empresarial (M.A.P.C.A).',
+    'Para começarmos bem, qual é o nome da sua empresa?'
+  ]},
+  { id: 'empresa_cnpj', text: [
+    'Excelente nome!', 
+    'Poderia me informar o CNPJ?', 
+    '(Apenas os números ou com pontuação, como preferir)'
+  ]},
+  { id: 'empresa_endereco', text: [
+    'Perfeito, já anotei o CNPJ.', 
+    'Qual é o endereço completo da sede (ou do escritório principal)?',
+    'Dica: Não esqueça de colocar a cidade e o estado. Ex: Av. Paulista, 1000 - São Paulo/SP'
+  ]},
+  { id: 'representante_nome', text: [
+    'Certo, anotado.', 
+    'Quem é o representante legal da empresa?'
+  ]},
+  { id: 'representante_cpf', text: [
+    'Poderia me informar o CPF desse representante?'
+  ]},
+  { id: 'consultor_nome', text: [
+    'Quem é o consultor da Live Consultoria responsável por este atendimento?',
+    'Se não souber, pode apenas colocar "Não sei".'
+  ]},
+  { id: 'consultor_email', text: [
+    'E qual é o e-mail de contato desse consultor?'
+  ]},
+  { id: 'estrategia_proposito', text: [
+    'Ótimo! Vamos entrar agora na parte Estratégica do negócio 🎯', 
+    'A empresa possui um propósito e uma visão claros? Vocês sabem exatamente onde querem chegar nos próximos anos?',
+    'Fique à vontade para explicar com suas próprias palavras.'
+  ]},
+  { id: 'estrategia_gargalos', text: [
+    'Interessante.',
+    'E quais você considera serem os principais *gargalos* ou dificuldades na Estratégia hoje?'
+  ]},
+  { id: 'estrategia_nota', type: 'quick-reply', options: ['1', '2', '3', '4', '5'], text: [
+    'Baseado nisso, de 1 a 5, que nota você daria para o Posicionamento Estratégico atual?',
+    '(Sendo 1 muito ruim e 5 excelente)'
+  ]},
+  { id: 'gov_socios', text: [
+    'Passando agora para a área de Governança 🏢',
+    'Quantos são os sócios da empresa atualmente?'
+  ]},
+  { id: 'gov_reunioes', type: 'quick-reply', options: ['Sim, estruturadas', 'Às vezes / Informais', 'Não fazemos'], text: [
+    'Vocês costumam fazer reuniões periódicas para analisar os resultados e tomar decisões?'
+  ]},
+  { id: 'gov_conhecimento', text: [
+    'E quanto ao papel de cada um: os sócios possuem o conhecimento técnico necessário para as funções que exercem hoje?',
+    'Há um mecanismo claro de tomada de decisão ou às vezes há conflitos que atrasam as coisas?'
+  ]},
+  { id: 'financeiro_controles', text: [
+    'Entendido. Vamos falar de Finanças 💰',
+    'Como são os controles financeiros da empresa hoje? Vocês acompanham fluxo de caixa, DRE, têm clareza dos custos?'
+  ]},
+  { id: 'financeiro_gargalos', text: [
+    'E quais os principais gargalos no Financeiro? (ex: endividamento alto, margens de lucro espremidas, falta de caixa...)'
+  ]},
+  { id: 'financeiro_nota', type: 'quick-reply', options: ['1', '2', '3', '4', '5'], text: [
+    'De 1 a 5, como você avalia a Gestão Financeira da empresa hoje?'
+  ]},
+  { id: 'processos_ferramentas', text: [
+    'Vamos para Operações e Processos ⚙️',
+    'Quais sistemas (ERPs) e ferramentas vocês utilizam no dia a dia para fazer a empresa rodar?'
+  ]},
+  { id: 'processos_gargalos', text: [
+    'Existem gargalos nessa área? (ex: muito trabalho manual e repetitivo, retrabalho, lentidão nos processos)'
+  ]},
+  { id: 'processos_nota', type: 'quick-reply', options: ['1', '2', '3', '4', '5'], text: [
+    'De 1 a 5, qual a sua nota para a maturidade dos Processos e da Automação na empresa?'
+  ]},
+  { id: 'pessoas_clima', text: [
+    'Entrando em Pessoas e Liderança 🤝',
+    'Como você descreveria o clima organizacional e a estrutura de liderança hoje?'
+  ]},
+  { id: 'pessoas_gargalos', text: [
+    'Quais os maiores gargalos de RH? (ex: turnover alto, dificuldade de contratar, falta de treinamento, desmotivação)'
+  ]},
+  { id: 'pessoas_nota', type: 'quick-reply', options: ['1', '2', '3', '4', '5'], text: [
+    'De 1 a 5, como avalia a área de Pessoas no geral?'
+  ]},
+  { id: 'marketing_panorama', text: [
+    'Estamos quase no fim! Vamos para Marketing e Estoque 📈',
+    'Como está a força da identidade da marca hoje e como funciona a atração e aquisição de clientes?'
+  ]},
+  { id: 'estoque_panorama', text: [
+    'E sobre Compras/Estoque (caso se aplique ao seu negócio): Como estão as políticas de compra, controle de perdas e giro de estoque?'
+  ]},
+  { id: 'marketing_estoque_nota', type: 'quick-reply', options: ['1', '2', '3', '4', '5'], text: [
+    'De 1 a 5, qual a nota geral para as áreas de Marketing e Operação de Produtos?'
+  ]},
+  { id: 'diagnostico_geral', text: [
+    'Para encerrar com chave de ouro 🔑',
+    'Deixe aqui algumas observações finais, expectativas que você tem com a consultoria ou qualquer contexto extra sobre o momento atual da empresa que julgar importante.'
+  ]}
 ];
 
 // Auth Logic
@@ -95,7 +166,6 @@ loginForm.addEventListener("submit", async (e) => {
 
 logoutBtn.addEventListener("click", async () => {
   await logout();
-  // Bypass reset caso de dev local
   window.location.reload();
 });
 
@@ -131,57 +201,67 @@ function appendMessage(text, isUser = false) {
 
 async function askQuestion() {
   const q = questions[currentState];
-  showTyping();
   msgInput.disabled = true;
   sendBtn.disabled = true;
   quickRepliesContainer.innerHTML = '';
   quickRepliesContainer.classList.add("hidden");
   
-   Fake delay base na length
-  const delay = Math.min(Math.max(q.text.length * 20, 800), 2000);
+  const texts = Array.isArray(q.text) ? q.text : [q.text];
   
-  setTimeout(() => {
+  for (let i = 0; i < texts.length; i++) {
+    showTyping();
+    const delay = Math.min(Math.max(texts[i].length * 30, 800), 2500);
+    await new Promise(resolve => setTimeout(resolve, delay));
     hideTyping();
-    appendMessage(q.text, false);
-    
-    if (q.type === 'quick-reply') {
-      quickRepliesContainer.classList.remove("hidden");
-      q.options.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.className = "reply-btn";
-        btn.textContent = opt;
-        btn.onclick = () => handleAnswer(opt);
-        quickRepliesContainer.appendChild(btn);
-      });
-      scrollChat();
-    } else {
-      msgInput.disabled = false;
-      sendBtn.disabled = false;
-      msgInput.focus();
-    }
-  }, delay);
+    appendMessage(texts[i], false);
+  }
+  
+  if (q.type === 'quick-reply') {
+    quickRepliesContainer.classList.remove("hidden");
+    q.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "reply-btn";
+      btn.textContent = opt;
+      btn.onclick = () => handleAnswer(opt);
+      quickRepliesContainer.appendChild(btn);
+    });
+    scrollChat();
+  } else {
+    msgInput.disabled = false;
+    sendBtn.disabled = false;
+    msgInput.focus();
+  }
 }
 
 async function finishDiagnostic() {
-  showTyping();
   msgInput.disabled = true;
   sendBtn.disabled = true;
   
-  // Configs
   diagnosticData.timestamp = serverTimestamp ? serverTimestamp() : new Date();
   diagnosticData.status = 'novo';
   
-  // Tentar salvar Firebase e/ou disparar Webhook
   try {
-    // console.log("Salvando no Firebase: ", diagnosticData);
-    // await addDoc(collection(db, "diagnosticos"), diagnosticData);
+    await addDoc(collection(db, "diagnosticos"), diagnosticData);
   } catch(e) {
     console.error("Erro ao salvar no firebase", e);
   }
 
+  showTyping();
   setTimeout(() => {
     hideTyping();
-    appendMessage("Perfeito! O diagnóstico foi enviado com sucesso. O nosso Agente AgeQuodAgis já está elaborando a sua proposta com base nessas informações.", false);
+    appendMessage("Perfeito! Recebi todos os seus dados.", false);
+    
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      appendMessage("O seu diagnóstico foi processado e nosso orquestrador estratégico (AgeQuodAgis) já começou a trabalhar na sua proposta personalizada.", false);
+      
+      showTyping();
+      setTimeout(() => {
+        hideTyping();
+        appendMessage("O consultor entrará em contato em breve com o link da sua proposta completa. Um grande abraço! 👋", false);
+      }, 2000);
+    }, 2500);
   }, 1500);
 }
 
