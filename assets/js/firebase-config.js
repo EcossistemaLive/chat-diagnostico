@@ -4,13 +4,13 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebas
 
 // Substitua pelas credenciais reais do Firebase
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "seu-projeto.firebaseapp.com",
-  projectId: "seu-projeto",
-  storageBucket: "seu-projeto.appspot.com",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
-};
+  apiKey: "AIzaSyBdxiZKq6QFRexkFQgXGc8JKidu-KWJ4ww",
+  authDomain: "julio-bot-ecd02.firebaseapp.com",
+  projectId: "julio-bot-ecd02",
+  storageBucket: "julio-bot-ecd02.firebasestorage.app",
+  messagingSenderId: "285462944271",
+  appId: "1:285462944271:web:4eec8ca46a5c0cad8c217a",
+  measurementId: "G-M462B61M9C"
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

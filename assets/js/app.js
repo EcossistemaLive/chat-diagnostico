@@ -137,7 +137,7 @@ async function askQuestion() {
   quickRepliesContainer.innerHTML = '';
   quickRepliesContainer.classList.add("hidden");
   
-  // Fake delay base na length
+   Fake delay base na length
   const delay = Math.min(Math.max(q.text.length * 20, 800), 2000);
   
   setTimeout(() => {
