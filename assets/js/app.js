@@ -24,7 +24,7 @@ const questions = [
   { id: 'empresa_endereco', text: 'E qual é o endereço completo (com cidade e estado)?' },
   { id: 'representante_nome', text: 'Quem é o representante legal da empresa?' },
   { id: 'representante_cpf', text: 'Poderia me informar o CPF desse representante?' },
-  { id: 'consultor_nome', text: 'Quem é o consultor ViDi responsável por este atendimento?' },
+  { id: 'consultor_nome', text: 'Quem é o consultor da Live Consultoria responsável por este atendimento?' },
   { id: 'consultor_email', text: 'Qual é o e-mail desse consultor?' },
   { id: 'estrategia_proposito', text: 'Certo, vamos à Estratégia. A empresa possui um propósito e uma visão claros? Sabem onde querem chegar?' },
   { id: 'estrategia_gargalos', text: 'Quais você considera os principais gargalos na Estratégia hoje?' },

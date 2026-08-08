@@ -6,7 +6,7 @@ import {
 
 import { auth } from "./firebase-config.js";
 
-const EMAIL_DOMAIN = "web.vidiceo.com.br";
+const EMAIL_DOMAIN = "web.liveconsultoria.com.br";
 
 function normalizePhone(raw) {
   const digits = (raw || "").replace(/\D/g, "");
