@@ -1,6 +1,6 @@
 import { loginClient, logout, onAuthChange } from "./auth.js";
 import { db } from "./firebase-config.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const loginScreen = document.getElementById("login-screen");
 const chatScreen = document.getElementById("chat-screen");
@@ -241,28 +241,51 @@ async function finishDiagnostic() {
   diagnosticData.status = 'novo';
   
   try {
-    await addDoc(collection(db, "diagnosticos"), diagnosticData);
-  } catch(e) {
-    console.error("Erro ao salvar no firebase", e);
-  }
-
-  showTyping();
-  setTimeout(() => {
-    hideTyping();
-    appendMessage("Perfeito! Recebi todos os seus dados.", false);
+    const docRef = await addDoc(collection(db, "diagnosticos"), diagnosticData);
     
     showTyping();
     setTimeout(() => {
       hideTyping();
-      appendMessage("O seu diagnóstico foi processado e nosso orquestrador estratégico (AgeQuodAgis) já começou a trabalhar na sua proposta personalizada.", false);
+      appendMessage("Perfeito! Recebi todos os seus dados.", false);
       
       showTyping();
       setTimeout(() => {
         hideTyping();
-        appendMessage("O consultor entrará em contato em breve com o link da sua proposta completa. Um grande abraço! 👋", false);
-      }, 2000);
-    }, 2500);
-  }, 1500);
+        appendMessage("O seu diagnóstico foi processado e o AgeQuodAgis já começou a trabalhar na sua proposta personalizada.", false);
+        
+        showTyping();
+        setTimeout(() => {
+          hideTyping();
+          appendMessage("⏳ Por favor, aguarde nesta tela. Assim que a inteligência artificial finalizar a escrita da proposta (pode levar 1 ou 2 minutos), o link aparecerá aqui mesmo.", false);
+          
+          // Fica escutando as mudanças no documento do firebase
+          const unsubscribe = onSnapshot(doc(db, "diagnosticos", docRef.id), (snapshot) => {
+            const data = snapshot.data();
+            if (data && data.status === 'concluido' && data.url_proposta) {
+              appendMessage("🎉 Sua proposta está pronta!", false);
+              
+              // Adiciona balão com link clicável
+              const linkMsg = document.createElement("div");
+              linkMsg.className = "msg bot";
+              const bubble = document.createElement("div");
+              bubble.className = "bubble";
+              bubble.innerHTML = `Você pode acessar a sua proposta e as recomendações dos nossos especialistas através deste link confidencial:<br><br><a href="${data.url_proposta}" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: bold;">Acessar Proposta M.A.P.C.A</a>`;
+              linkMsg.appendChild(bubble);
+              messagesContainer.appendChild(linkMsg);
+              scrollChat();
+              
+              unsubscribe(); // Para de escutar o banco
+            }
+          });
+
+        }, 2000);
+      }, 2500);
+    }, 1500);
+
+  } catch(e) {
+    console.error("Erro ao salvar no firebase", e);
+    appendMessage("Desculpe, ocorreu um erro de conexão ao enviar seus dados.", false);
+  }
 }
 
 function handleAnswer(answer) {

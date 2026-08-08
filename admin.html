@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Live Consultoria</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    /* Estilos específicos do painel admin */
+    .admin-container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 30px;
+      background: var(--bg-elevated);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .admin-container h1 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    .success-msg {
+      background: rgba(40, 167, 69, 0.1);
+      color: #28a745;
+      padding: 10px;
+      border: 1px solid #28a745;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tela de Login do Admin (Simples proteção local) -->
+  <div id="admin-auth" class="admin-container">
+    <h1>Acesso Restrito</h1>
+    <form id="form-admin-auth">
+      <input type="password" id="master-password" placeholder="Senha Mestra" required />
+      <button type="submit">Acessar Painel</button>
+      <p id="admin-error" class="error-msg hidden"></p>
+    </form>
+  </div>
+
+  <!-- Painel de Criação de Usuário -->
+  <div id="admin-panel" class="admin-container hidden">
+    <h1>Criar Acesso de Cliente</h1>
+    <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">
+      Gere o login do cliente preenchendo o número de telefone.
+    </p>
+    <div id="success-msg" class="success-msg">Usuário criado com sucesso!</div>
+    
+    <form id="form-create-user">
+      <div class="input-group">
+        <label>Telefone do Cliente (DDD + Número)</label>
+        <input type="text" id="new-phone" placeholder="Ex: 62984002840" required />
+      </div>
+      <div class="input-group">
+        <label>Senha Provisória</label>
+        <input type="text" id="new-password" value="Luiz2840" required />
+      </div>
+      <button type="submit" id="btn-create">Criar Acesso</button>
+      <p id="create-error" class="error-msg hidden"></p>
+    </form>
+    
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="index.html" style="color: var(--text-muted); text-decoration: underline;">Voltar para o Chat</a>
+    </div>
+  </div>
+
+  <script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>
