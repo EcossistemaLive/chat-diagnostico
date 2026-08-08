@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+
+# Fallback para SPA (evitar erro 404 ao atualizar rotas)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
